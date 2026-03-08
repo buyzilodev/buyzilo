@@ -1,0 +1,219 @@
+{
+  "id": "help_center",
+  "name": "Help Center",
+  "version": "1.0.0",
+  "description": "Knowledge-base categories, support articles, and FAQ discovery.",
+  "category": "content",
+  "author": "Buyzilo",
+  "sourceType": "builtin",
+  "scheme": {
+    "format": "addon.json",
+    "priority": 1600,
+    "status": "active",
+    "defaultLanguage": "en",
+    "autoInstall": true,
+    "editionType": ["MULTIVENDOR", "ULTIMATE"],
+    "supplier": "Buyzilo",
+    "supplierLink": "https://buyzilo.example/addons/help-center",
+    "coreVersion": "0.1.0",
+    "coreEditions": ["MULTIVENDOR"]
+  },
+  "release": {
+    "channel": "stable",
+    "notes": "Public support content and knowledge-base package."
+  },
+  "tags": ["support", "cms"],
+  "hooks": [
+    {
+      "id": "support-suggestions",
+      "name": "support.request.before_submit",
+      "type": "event",
+      "target": "/dashboard/support",
+      "description": "Suggests help-center articles before opening support tickets."
+    },
+    {
+      "id": "storefront-help-route",
+      "name": "storefront.route.help_center",
+      "type": "route",
+      "target": "/help",
+      "description": "Owns the public help-center landing and article route family."
+    }
+  ],
+  "dataGovernance": {
+    "exportSiteSettings": ["helpCenterConfig"],
+    "cleanupSiteSettings": ["helpCenterConfig"],
+    "retentionNote": "Knowledge-base configuration is exportable and removable, but published support articles should be reviewed before cleanup."
+  },
+  "documentation": {
+    "readmePath": "README.md",
+    "screenshots": [
+      {
+        "src": "preview.svg",
+        "caption": "Knowledge-base categories and article publishing workflow"
+      }
+    ]
+  },
+  "operators": {
+    "allowedRoles": ["ADMIN", "MODERATOR"],
+    "requiredPermissions": ["manage_content"]
+  },
+  "compatibility": {
+    "minAppVersion": "0.1.0"
+  },
+  "entrypoints": {
+    "adminHref": "/admin/website/help-center",
+    "adminPages": [
+      {
+        "id": "knowledge-base",
+        "label": "Help Center",
+        "href": "/admin/website/help-center",
+        "description": "Knowledge-base categories and article editing",
+        "title": "Help Center",
+        "subtitle": "Manage support categories and knowledge-base articles",
+        "inactiveTitle": "Help Center addon is inactive",
+        "inactiveDescription": "Activate the help_center package to manage knowledge-base categories and support articles.",
+        "visibility": {
+          "roles": ["ADMIN", "MODERATOR"],
+          "permissions": ["manage_content"]
+        }
+      }
+    ],
+    "storefrontPages": [
+      {
+        "id": "help-home",
+        "href": "/help",
+        "title": "Help Center",
+        "subtitle": "Get answers before you open a ticket",
+        "inactiveTitle": "Help center is unavailable",
+        "inactiveDescription": "This knowledge-base route is currently unavailable.",
+        "visibility": {
+          "audiences": ["guest", "authenticated"]
+        }
+      },
+      {
+        "id": "help-detail",
+        "href": "/help/[slug]",
+        "title": "Help Center",
+        "subtitle": "Knowledge-base article and category route",
+        "inactiveTitle": "Help article is unavailable",
+        "inactiveDescription": "This help-center article route is currently unavailable.",
+        "visibility": {
+          "audiences": ["guest", "authenticated"]
+        }
+      }
+    ],
+    "visibility": {
+      "roles": ["ADMIN", "MODERATOR"],
+      "permissions": ["manage_content"]
+    }
+  },
+  "settings": {
+    "sections": [
+      {
+        "id": "search",
+        "label": "Search",
+        "fields": [
+          {
+            "id": "enableArticleSuggestions",
+            "label": "Suggest articles during support request creation",
+            "type": "checkbox",
+            "defaultValue": true
+          },
+          {
+            "id": "featuredCategoryTitle",
+            "label": "Featured category label",
+            "type": "text",
+            "defaultValue": "Popular help topics"
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {
+    "dashboardWidgets": [
+      {
+        "id": "knowledge-base",
+        "title": "Help center knowledge base",
+        "subtitle": "Maintain support categories and articles from the content workspace.",
+        "href": "/admin/website/help-center",
+        "tone": "emerald",
+        "visibility": {
+          "roles": ["ADMIN", "MODERATOR"],
+          "permissions": ["manage_content"]
+        }
+      }
+    ],
+    "storefrontBlocks": [
+      {
+        "id": "help-discovery",
+        "title": "Need help before checkout?",
+        "subtitle": "Browse knowledge-base articles and common answers before opening a support request.",
+        "href": "/help",
+        "page": "home",
+        "tone": "emerald",
+        "visibility": {
+          "audiences": ["guest", "authenticated"]
+        }
+      }
+    ]
+  },
+  "lifecycle": {
+    "install": {
+      "prerequisites": [
+        {
+          "id": "support-email",
+          "label": "Support email",
+          "type": "siteSetting",
+          "key": "supportEmail",
+          "description": "Set the public support contact before opening the knowledge-base to buyers."
+        }
+      ],
+      "tasks": [
+        {
+          "id": "seed-help-runtime-flag",
+          "label": "Seed help center runtime flag",
+          "type": "upsertSiteSetting",
+          "key": "addons.help_center.runtimeEnabled",
+          "value": true,
+          "description": "Marks help-center runtime availability for support-routing safeguards."
+        },
+        {
+          "id": "ensure-help-runtime-dir",
+          "label": "Ensure help center runtime directory",
+          "type": "ensureDirectory",
+          "path": "cache/help-center",
+          "description": "Creates the addon runtime cache directory for knowledge-base exports."
+        }
+      ]
+    },
+    "upgrade": {
+      "migrations": [
+        {
+          "toVersion": "1.1.0",
+          "description": "Seed help center discovery defaults for support-page article suggestions.",
+          "seedSiteSettings": {
+            "helpCenterUpgradeMarker": "1.1.0"
+          },
+          "extensionMigrations": {
+            "adminPages": ["/admin/website/help-center"],
+            "storefrontPages": ["/help", "/help/[slug]"],
+            "dashboardWidgets": ["knowledge-base"],
+            "storefrontBlocks": ["help-discovery"],
+            "notes": "Align help discovery routes and dashboard widget naming with the knowledge-base rollout."
+          }
+        }
+      ]
+    },
+    "uninstall": {
+      "tasks": [
+        {
+          "id": "clear-help-runtime-flag",
+          "label": "Clear help center runtime flag",
+          "type": "deleteSiteSetting",
+          "key": "addons.help_center.runtimeEnabled",
+          "description": "Removes the runtime marker when the help-center package is uninstalled."
+        }
+      ]
+    }
+  }
+}

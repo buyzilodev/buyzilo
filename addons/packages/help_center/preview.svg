@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#dcfce7"/>
+  <rect x="56" y="48" width="1088" height="624" rx="28" fill="#ffffff"/>
+  <rect x="94" y="96" width="1012" height="88" rx="24" fill="#064e3b"/>
+  <rect x="130" y="126" width="360" height="24" rx="12" fill="#a7f3d0"/>
+  <rect x="94" y="228" width="320" height="360" rx="24" fill="#ecfdf5"/>
+  <rect x="440" y="228" width="666" height="110" rx="24" fill="#d1fae5"/>
+  <rect x="440" y="364" width="666" height="110" rx="24" fill="#bbf7d0"/>
+  <rect x="440" y="500" width="666" height="88" rx="24" fill="#86efac"/>
+  <text x="126" y="628" font-family="Arial, sans-serif" font-size="32" fill="#065f46">Knowledge-base management and buyer self-service</text>
+</svg>

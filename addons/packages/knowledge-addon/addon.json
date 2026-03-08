@@ -1,0 +1,68 @@
+{
+  "id": "knowledge-addon",
+  "name": "Knowledge Addon",
+  "version": "1.0.0",
+  "description": "Reusable content addon scaffold.",
+  "category": "Content",
+  "sourceType": "uploaded",
+  "dependencies": [],
+  "tags": [
+    "template",
+    "content"
+  ],
+  "documentation": {
+    "readmePath": "README.md",
+    "screenshots": [
+      {
+        "src": "preview.svg",
+        "caption": "Knowledge Addon package preview"
+      }
+    ]
+  },
+  "dataGovernance": {
+    "exportSiteSettings": [
+      "addon:knowledge-addon:title"
+    ],
+    "cleanupSiteSettings": [
+      "addon:knowledge-addon:title"
+    ]
+  },
+  "entrypoints": {
+    "adminHref": "/admin/addons/knowledge-addon",
+    "adminPages": [
+      {
+        "id": "content-admin",
+        "label": "Knowledge Manager",
+        "href": "/admin/addons/knowledge-addon",
+        "description": "Manage knowledge-base style content.",
+        "title": "Knowledge Manager"
+      }
+    ],
+    "storefrontPages": [
+      {
+        "id": "knowledge-home",
+        "href": "/knowledge-addon",
+        "title": "Knowledge Center",
+        "subtitle": "Public addon-powered content landing page."
+      }
+    ]
+  },
+  "settings": {
+    "sections": [
+      {
+        "id": "content",
+        "label": "Content Settings",
+        "fields": [
+          {
+            "id": "publicTitle",
+            "label": "Public Title",
+            "type": "text",
+            "defaultValue": "Knowledge Center",
+            "siteSettingKey": "addon:knowledge-addon:title"
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {}
+}

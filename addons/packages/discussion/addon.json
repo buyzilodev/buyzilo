@@ -1,0 +1,160 @@
+{
+  "id": "discussion",
+  "name": "Discussion",
+  "version": "1.0.0",
+  "description": "Product reviews, questions, answers, and moderation workflow.",
+  "category": "catalog",
+  "author": "Buyzilo",
+  "sourceType": "builtin",
+  "scheme": {
+    "format": "addon.json",
+    "priority": 1700,
+    "status": "active",
+    "defaultLanguage": "en",
+    "autoInstall": true,
+    "editionType": ["MULTIVENDOR", "ULTIMATE"],
+    "supplier": "Buyzilo",
+    "supplierLink": "https://buyzilo.example/addons/discussion",
+    "coreVersion": "0.1.0",
+    "coreEditions": ["MULTIVENDOR"]
+  },
+  "release": {
+    "channel": "stable",
+    "notes": "Core catalog moderation surface."
+  },
+  "tags": ["reviews", "moderation", "catalog"],
+  "hooks": [
+    {
+      "id": "product-discussion-panel",
+      "name": "product.detail.render_discussion",
+      "type": "template",
+      "target": "/products/[id]",
+      "description": "Injects reviews and questions into the product detail layout."
+    },
+    {
+      "id": "moderation-queue",
+      "name": "admin.reviews.queue",
+      "type": "event",
+      "target": "/admin/reviews/discussion",
+      "description": "Registers moderation workload surfaces for public discussion and review events."
+    }
+  ],
+  "dataGovernance": {
+    "exportSiteSettings": ["discussionAutoApproval", "discussionDefaultThreadType"],
+    "cleanupSiteSettings": [],
+    "retentionNote": "Discussion moderation settings are exportable; public review and thread records stay in application data and are not removed by addon cleanup."
+  },
+  "documentation": {
+    "readmePath": "README.md",
+    "screenshots": [
+      {
+        "src": "preview.svg",
+        "caption": "Product review and question moderation desk"
+      }
+    ]
+  },
+  "operators": {
+    "allowedRoles": ["ADMIN", "MODERATOR"],
+    "requiredPermissions": ["approve_products"]
+  },
+  "entrypoints": {
+    "adminHref": "/admin/reviews/discussion",
+    "adminPages": [
+      {
+        "id": "moderation",
+        "label": "Discussion Moderation",
+        "href": "/admin/reviews/discussion",
+        "description": "Questions, answers, and public thread review",
+        "title": "Discussion",
+        "subtitle": "Moderate product questions, answers, and public comments",
+        "inactiveTitle": "Discussion addon is inactive",
+        "inactiveDescription": "Activate the discussion package to reopen reviews and public discussion moderation.",
+        "visibility": {
+          "roles": ["ADMIN", "MODERATOR"],
+          "permissions": ["approve_products"]
+        }
+      },
+      {
+        "id": "reviews",
+        "label": "Review Queue",
+        "href": "/admin/reviews",
+        "description": "Linked review management for product discussion",
+        "title": "Reviews",
+        "subtitle": "Manage review moderation linked to the discussion package",
+        "visibility": {
+          "roles": ["ADMIN", "MODERATOR"],
+          "permissions": ["approve_products"]
+        }
+      }
+    ],
+    "visibility": {
+      "roles": ["ADMIN", "MODERATOR"],
+      "permissions": ["approve_products"]
+    }
+  },
+  "settings": {
+    "sections": [
+      {
+        "id": "moderation",
+        "label": "Moderation",
+        "fields": [
+          {
+            "id": "autoApproval",
+            "label": "Auto-approve trusted submissions",
+            "type": "checkbox",
+            "defaultValue": false
+          },
+          {
+            "id": "defaultThreadType",
+            "label": "Default discussion type",
+            "type": "select",
+            "defaultValue": "QUESTION",
+            "options": [
+              { "value": "QUESTION", "label": "Question" },
+              { "value": "COMMENT", "label": "Comment" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {
+    "dashboardWidgets": [
+      {
+        "id": "discussion-moderation",
+        "title": "Discussion moderation",
+        "subtitle": "Review product questions, answers, and public thread activity.",
+        "href": "/admin/reviews/discussion",
+        "tone": "amber",
+        "visibility": {
+          "roles": ["ADMIN", "MODERATOR"],
+          "permissions": ["approve_products"]
+        }
+      }
+    ]
+  },
+  "lifecycle": {
+    "install": {
+      "prerequisites": [
+        {
+          "id": "site-name",
+          "label": "Marketplace site name",
+          "type": "siteSetting",
+          "key": "siteName",
+          "description": "Public review and discussion surfaces should inherit a configured marketplace identity."
+        }
+      ]
+    },
+    "upgrade": {
+      "migrations": [
+        {
+          "toVersion": "1.1.0",
+          "description": "Align moderation defaults for threaded review rollout.",
+          "setAddonSettings": {
+            "defaultThreadType": "QUESTION"
+          }
+        }
+      ]
+    }
+  }
+}

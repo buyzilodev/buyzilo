@@ -1,0 +1,117 @@
+{
+  "id": "zapier",
+  "name": "Zapier",
+  "version": "1.0.0",
+  "description": "Outbound webhook automation for external workflow tools.",
+  "category": "integrations",
+  "author": "Buyzilo",
+  "sourceType": "builtin",
+  "scheme": {
+    "format": "addon.json",
+    "priority": 1800,
+    "status": "disabled",
+    "defaultLanguage": "en",
+    "autoInstall": false,
+    "editionType": ["MULTIVENDOR", "ULTIMATE"],
+    "supplier": "Buyzilo",
+    "supplierLink": "https://buyzilo.example/addons/zapier",
+    "coreVersion": "0.1.0",
+    "coreEditions": ["MULTIVENDOR"]
+  },
+  "release": {
+    "channel": "beta",
+    "notes": "Automation delivery package with evolving webhook coverage."
+  },
+  "tags": ["webhooks", "automation", "integrations"],
+  "hooks": [
+    {
+      "id": "order-webhook",
+      "name": "orders.after_create",
+      "type": "event",
+      "target": "/api/checkout",
+      "description": "Dispatches order-created automation payloads to Zapier-style webhooks."
+    },
+    {
+      "id": "shipment-webhook",
+      "name": "shipments.after_update",
+      "type": "event",
+      "target": "/api/admin/shipments",
+      "description": "Dispatches shipment lifecycle automation payloads to external integrations."
+    }
+  ],
+  "dataGovernance": {
+    "exportSiteSettings": ["zapierConfigEnabled", "zapierConfigWebhookUrl", "zapierConfigSecret"],
+    "cleanupSiteSettings": ["zapierConfigEnabled", "zapierConfigWebhookUrl", "zapierConfigSecret"],
+    "retentionNote": "Webhook endpoint configuration is fully owned by the addon and can be exported or removed during package cleanup."
+  },
+  "compatibility": {
+    "minAppVersion": "0.1.0",
+    "addonVersionConstraints": {
+      "banners": {
+        "min": "1.0.0"
+      }
+    }
+  },
+  "settings": {
+    "sections": [
+      {
+        "id": "delivery",
+        "label": "Delivery",
+        "fields": [
+          {
+            "id": "enabled",
+            "label": "Enable webhook delivery",
+            "type": "checkbox",
+            "defaultValue": false,
+            "siteSettingKey": "zapierConfigEnabled"
+          },
+          {
+            "id": "webhookUrl",
+            "label": "Webhook URL",
+            "type": "url",
+            "defaultValue": "",
+            "siteSettingKey": "zapierConfigWebhookUrl"
+          },
+          {
+            "id": "secret",
+            "label": "Signing secret",
+            "type": "text",
+            "defaultValue": "",
+            "siteSettingKey": "zapierConfigSecret"
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {
+    "dashboardWidgets": [
+      {
+        "id": "automation-delivery",
+        "title": "Automation delivery",
+        "subtitle": "Monitor outbound webhook automation and package-level integration settings.",
+        "href": "/admin/addons",
+        "tone": "violet"
+      }
+    ]
+  },
+  "lifecycle": {
+    "upgrade": {
+      "migrations": [
+        {
+          "toVersion": "1.1.0",
+          "description": "Seed webhook retry marker and keep delivery disabled after upgrade.",
+          "seedSiteSettings": {
+            "zapierUpgradeMarker": "1.1.0"
+          },
+          "setAddonSettings": {
+            "enabled": false
+          },
+          "extensionMigrations": {
+            "dashboardWidgets": ["automation-delivery"],
+            "notes": "Refresh automation-delivery widget messaging for post-upgrade webhook operations."
+          }
+        }
+      ]
+    }
+  }
+}

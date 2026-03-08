@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" rx="28" fill="#1f2937"/>
+  <rect x="32" y="32" width="1136" height="566" rx="24" fill="url(#g)"/>
+  <text x="72" y="150" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">Campaign Addon</text>
+  <text x="72" y="202" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="22">Reusable marketing addon scaffold.</text>
+  <text x="72" y="300" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="18">Preset: marketing</text>
+  <text x="72" y="336" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="18">Package: campaign-addon</text>
+  <text x="72" y="372" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="18">Version: 1.0.0</text>
+  <defs>
+    <linearGradient id="g" x1="32" y1="32" x2="1168" y2="598" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#1f2937"/>
+    </linearGradient>
+  </defs>
+</svg>

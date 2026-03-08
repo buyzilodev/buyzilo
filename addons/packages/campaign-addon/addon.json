@@ -1,0 +1,94 @@
+{
+  "id": "campaign-addon",
+  "name": "Campaign Addon",
+  "version": "1.0.0",
+  "description": "Reusable marketing addon scaffold.",
+  "category": "Marketing",
+  "sourceType": "uploaded",
+  "dependencies": [],
+  "tags": [
+    "template",
+    "marketing"
+  ],
+  "documentation": {
+    "readmePath": "README.md",
+    "screenshots": [
+      {
+        "src": "preview.svg",
+        "caption": "Campaign Addon package preview"
+      }
+    ]
+  },
+  "release": {
+    "channel": "stable",
+    "notes": "Template scaffold"
+  },
+  "dataGovernance": {
+    "exportSiteSettings": [
+      "addon:campaign-addon:enabled",
+      "addon:campaign-addon:headline"
+    ],
+    "cleanupSiteSettings": [
+      "addon:campaign-addon:enabled",
+      "addon:campaign-addon:headline"
+    ],
+    "retentionNote": "Exports and cleans the scaffolded campaign settings."
+  },
+  "entrypoints": {
+    "adminHref": "/admin/addons/campaign-addon",
+    "adminPages": [
+      {
+        "id": "workspace",
+        "label": "Campaign Workspace",
+        "href": "/admin/addons/campaign-addon",
+        "description": "Manage campaign addon settings and operations.",
+        "title": "Campaign Workspace"
+      }
+    ]
+  },
+  "settings": {
+    "sections": [
+      {
+        "id": "general",
+        "label": "General",
+        "fields": [
+          {
+            "id": "enabled",
+            "label": "Enabled",
+            "type": "checkbox",
+            "defaultValue": true,
+            "siteSettingKey": "addon:campaign-addon:enabled"
+          },
+          {
+            "id": "headline",
+            "label": "Headline",
+            "type": "text",
+            "defaultValue": "Launch your next campaign",
+            "siteSettingKey": "addon:campaign-addon:headline"
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {
+    "dashboardWidgets": [
+      {
+        "id": "campaign-health",
+        "title": "Campaign Health",
+        "subtitle": "Track rollout posture for this addon",
+        "href": "/admin/addons/campaign-addon",
+        "tone": "violet"
+      }
+    ],
+    "storefrontBlocks": [
+      {
+        "id": "campaign-hero",
+        "title": "Campaign spotlight",
+        "subtitle": "Rendered from addon-managed storefront content",
+        "href": "/campaigns/sample",
+        "page": "home",
+        "tone": "amber"
+      }
+    ]
+  }
+}

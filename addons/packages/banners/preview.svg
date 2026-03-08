@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#e0f2fe"/>
+  <rect x="56" y="48" width="1088" height="624" rx="28" fill="#ffffff"/>
+  <rect x="96" y="96" width="1008" height="188" rx="24" fill="#0f172a"/>
+  <rect x="126" y="130" width="320" height="22" rx="11" fill="#93c5fd"/>
+  <rect x="126" y="168" width="520" height="54" rx="16" fill="#ffffff" opacity="0.96"/>
+  <rect x="126" y="236" width="210" height="18" rx="9" fill="#cbd5e1"/>
+  <rect x="96" y="328" width="312" height="280" rx="22" fill="#dbeafe"/>
+  <rect x="444" y="328" width="312" height="280" rx="22" fill="#bfdbfe"/>
+  <rect x="792" y="328" width="312" height="280" rx="22" fill="#93c5fd"/>
+  <text x="126" y="580" font-family="Arial, sans-serif" font-size="32" fill="#0f172a">Storefront campaign placements</text>
+</svg>

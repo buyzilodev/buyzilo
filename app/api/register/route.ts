@@ -1,16 +1,24 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
+import { sendWelcomeEmail } from '@/lib/email'
+import { registerSchema } from '@/lib/validators/auth'
+import { applyReferralOnRegistration } from '@/lib/actions/referrals'
+import { verifyRecaptchaToken } from '@/lib/helpers/recaptcha'
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password } = await req.json()
+    const body = await req.json()
+    const parsed = registerSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid registration data' }, { status: 400 })
+    }
 
-    if (!name || !email || !password) {
-      return NextResponse.json(
-        { error: 'All fields are required' },
-        { status: 400 }
-      )
+    const { name, email, password, referralCode, recaptchaToken } = parsed.data
+
+    const captchaCheck = await verifyRecaptchaToken(recaptchaToken, 'register')
+    if (!captchaCheck.ok) {
+      return NextResponse.json({ error: captchaCheck.message }, { status: 400 })
     }
 
     const existingUser = await prisma.user.findUnique({
@@ -35,13 +43,26 @@ export async function POST(req: Request) {
       }
     })
 
+    try {
+      await sendWelcomeEmail({ to: email, name })
+    } catch {
+      console.log('Welcome email failed to send')
+    }
+
+    await applyReferralOnRegistration({
+      referralCode,
+      newUserId: user.id,
+      newUserEmail: user.email,
+    })
+
     return NextResponse.json(
       { message: 'User created successfully', userId: user.id },
       { status: 201 }
     )
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Something went wrong'
     return NextResponse.json(
-      { error: 'Something went wrong' },
+      { error: message },
       { status: 500 }
     )
   }

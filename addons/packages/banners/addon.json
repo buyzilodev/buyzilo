@@ -1,0 +1,194 @@
+{
+  "id": "banners",
+  "name": "Banners",
+  "version": "1.0.0",
+  "description": "Campaign banners, promo cards, and storefront placement rules.",
+  "category": "marketing",
+  "author": "Buyzilo",
+  "sourceType": "builtin",
+  "scheme": {
+    "format": "addon.json",
+    "priority": 2000,
+    "status": "active",
+    "defaultLanguage": "en",
+    "autoInstall": true,
+    "editionType": ["MULTIVENDOR", "ULTIMATE"],
+    "supplier": "Buyzilo",
+    "supplierLink": "https://buyzilo.example/addons/banners",
+    "coreVersion": "0.1.0",
+    "coreEditions": ["MULTIVENDOR"]
+  },
+  "release": {
+    "channel": "stable",
+    "notes": "Core storefront merchandising package."
+  },
+  "tags": ["storefront", "marketing", "campaigns"],
+  "hooks": [
+    {
+      "id": "admin-dashboard-widget",
+      "name": "admin_dashboard.render_cards",
+      "type": "event",
+      "target": "/admin",
+      "description": "Injects banner workload widgets into the admin control center."
+    },
+    {
+      "id": "storefront-home-block",
+      "name": "storefront.homepage.render_blocks",
+      "type": "template",
+      "target": "/",
+      "description": "Adds campaign banner blocks into the storefront homepage merchandising stack."
+    }
+  ],
+  "dataGovernance": {
+    "exportSiteSettings": ["homepageConfig", "storefrontConfig"],
+    "cleanupSiteSettings": ["homepageConfig"],
+    "retentionNote": "Banner package owns homepage and storefront campaign configuration but should not remove shared storefront navigation settings."
+  },
+  "documentation": {
+    "readmePath": "README.md",
+    "screenshots": [
+      {
+        "src": "preview.svg",
+        "caption": "Banner placements and campaign routing overview"
+      }
+    ]
+  },
+  "operators": {
+    "allowedRoles": ["ADMIN"],
+    "requiredPermissions": ["manage_marketing"]
+  },
+  "entrypoints": {
+    "adminHref": "/admin/marketing/banners",
+    "adminPages": [
+      {
+        "id": "placements",
+        "label": "Banner Placements",
+        "href": "/admin/marketing/banners",
+        "description": "Campaign cards, landing pages, and placement rules",
+        "title": "Banners",
+        "subtitle": "Campaign landing pages, banner cards, and storefront messaging",
+        "inactiveTitle": "Banners addon is inactive",
+        "inactiveDescription": "Activate the banners package before editing storefront campaign placements.",
+        "visibility": {
+          "roles": ["ADMIN", "MANAGER"],
+          "permissions": ["manage_marketing"]
+        }
+      }
+    ],
+    "visibility": {
+      "roles": ["ADMIN", "MANAGER"],
+      "permissions": ["manage_marketing"]
+    }
+  },
+  "settings": {
+    "sections": [
+      {
+        "id": "general",
+        "label": "General",
+        "description": "Control storefront banner delivery behavior.",
+        "fields": [
+          {
+            "id": "enabled",
+            "label": "Enable banner placements",
+            "type": "checkbox",
+            "defaultValue": true
+          },
+          {
+            "id": "maxHomepageCards",
+            "label": "Homepage card limit",
+            "type": "number",
+            "defaultValue": 3
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {
+    "dashboardWidgets": [
+      {
+        "id": "campaign-control",
+        "title": "Campaign placement desk",
+        "subtitle": "Open banner and campaign placement controls for storefront pages.",
+        "href": "/admin/marketing/banners",
+        "tone": "blue",
+        "visibility": {
+          "roles": ["ADMIN", "MANAGER"],
+          "permissions": ["manage_marketing"]
+        }
+      }
+    ],
+    "storefrontBlocks": [
+      {
+        "id": "campaign-promos",
+        "title": "Campaigns tuned by addons",
+        "subtitle": "Installed marketing packages can add homepage promotional blocks without hardcoded template edits.",
+        "href": "/products",
+        "page": "home",
+        "tone": "blue",
+        "visibility": {
+          "audiences": ["guest", "authenticated"]
+        }
+      }
+    ]
+  },
+  "lifecycle": {
+    "install": {
+      "prerequisites": [
+        {
+          "id": "site-name",
+          "label": "Marketplace site name",
+          "type": "siteSetting",
+          "key": "siteName",
+          "description": "Brand naming should be configured before publishing storefront banner campaigns."
+        }
+      ],
+      "tasks": [
+        {
+          "id": "seed-runtime-flag",
+          "label": "Seed banner runtime flag",
+          "type": "upsertSiteSetting",
+          "key": "addons.banners.runtimeEnabled",
+          "value": true,
+          "description": "Marks banner runtime availability for package-governance checks."
+        },
+        {
+          "id": "ensure-banner-runtime-dir",
+          "label": "Ensure banner runtime directory",
+          "type": "ensureDirectory",
+          "path": "cache/banners",
+          "description": "Creates the addon runtime cache directory used by banner exports and previews."
+        }
+      ]
+    },
+    "upgrade": {
+      "migrations": [
+        {
+          "toVersion": "1.1.0",
+          "description": "Seed storefront banner visibility defaults for upgraded installs.",
+          "seedSiteSettings": {
+            "bannersUpgradeMarker": "1.1.0"
+          },
+          "setAddonSettings": {
+            "enabled": true
+          },
+          "extensionMigrations": {
+            "adminPages": ["/admin/marketing/banners"],
+            "storefrontBlocks": ["campaign-promos"],
+            "notes": "Promote campaign-promos block as the primary homepage merchandising entry."
+          }
+        }
+      ]
+    },
+    "uninstall": {
+      "tasks": [
+        {
+          "id": "clear-runtime-flag",
+          "label": "Clear banner runtime flag",
+          "type": "deleteSiteSetting",
+          "key": "addons.banners.runtimeEnabled",
+          "description": "Removes the package runtime marker when banners is uninstalled."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "id": "pdf_documents",
+  "name": "PDF Documents",
+  "version": "1.0.0",
+  "description": "Printable invoice and order document generation.",
+  "category": "orders",
+  "author": "Buyzilo",
+  "sourceType": "builtin",
+  "scheme": {
+    "format": "addon.json",
+    "priority": 1200,
+    "status": "active",
+    "defaultLanguage": "en",
+    "autoInstall": true,
+    "editionType": ["MULTIVENDOR", "ULTIMATE"],
+    "supplier": "Buyzilo",
+    "supplierLink": "https://buyzilo.example/addons/pdf-documents",
+    "coreVersion": "0.1.0",
+    "coreEditions": ["MULTIVENDOR"]
+  },
+  "release": {
+    "channel": "stable",
+    "notes": "Order-document generation package."
+  },
+  "tags": ["orders", "documents"],
+  "hooks": [
+    {
+      "id": "invoice-routes",
+      "name": "orders.invoice.route",
+      "type": "route",
+      "target": "/api/orders/[id]/invoice",
+      "description": "Registers invoice document generation routes for buyer, admin, and vendor order views."
+    }
+  ],
+  "dataGovernance": {
+    "exportSiteSettings": [],
+    "cleanupSiteSettings": [],
+    "retentionNote": "PDF documents rely on live order data and do not currently own dedicated site-setting records."
+  },
+  "extensions": {
+    "dashboardWidgets": [
+      {
+        "id": "invoice-tools",
+        "title": "Document-ready orders",
+        "subtitle": "Open order operations and issue printable invoice documents.",
+        "href": "/admin/orders",
+        "tone": "slate"
+      }
+    ]
+  },
+  "lifecycle": {
+    "upgrade": {
+      "migrations": [
+        {
+          "toVersion": "1.1.0",
+          "description": "Mark invoice template compatibility for upgraded installs.",
+          "seedSiteSettings": {
+            "pdfDocumentsUpgradeMarker": "1.1.0"
+          }
+        }
+      ]
+    }
+  }
+}

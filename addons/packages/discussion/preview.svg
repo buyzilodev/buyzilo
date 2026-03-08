@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#fef3c7"/>
+  <rect x="56" y="48" width="1088" height="624" rx="28" fill="#ffffff"/>
+  <rect x="96" y="96" width="280" height="520" rx="22" fill="#fffbeb"/>
+  <rect x="404" y="96" width="700" height="150" rx="22" fill="#fde68a"/>
+  <rect x="404" y="274" width="700" height="150" rx="22" fill="#fcd34d"/>
+  <rect x="404" y="452" width="700" height="150" rx="22" fill="#fbbf24"/>
+  <text x="126" y="626" font-family="Arial, sans-serif" font-size="32" fill="#92400e">Review questions, answers, and moderation decisions</text>
+</svg>
